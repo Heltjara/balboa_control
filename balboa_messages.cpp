@@ -1,5 +1,56 @@
 #include "balboa_messages.hpp"
 
+using namespace balboa;
+
+void ControlConfigRequest::SetPayload(
+	bool isType1, data_type &data)
+{
+	if (isType1)
+	{
+		data.payload[0] = 0x02;
+		data.payload[1] = 0x00;
+		data.payload[2] = 0x00;
+	}
+	else
+	{
+		data.payload[0] = 0x00;
+		data.payload[1] = 0x00;
+		data.payload[2] = 0x01;
+	}
+}
+
+void ToggleItemRequest::Toggle(ToggleItemRequest::ToggleItem item,
+ data_type &data)
+{
+	data._item = item;
+	data._r = 0;
+}
+
+void SetTempRequest::SetTemperature(SpaTemp &temp, data_type &data)
+{
+	data._temp = temp.temp;
+}
+
+void SetTimeRequest::SetTime(SpaTime &time, data_type &data)
+{
+	data._hour = time.hour;
+	data._displayAs24Hr = time.displayAs24Hr;
+	data._minute = time.minute;
+}
+
+void FilterConfigRequest::SetPayload(data_type &data)
+{
+	data._payload[0] = 0x01;
+	data._payload[1] = 0;
+	data._payload[2] = 0;
+}
+
+void SetTempScaleRequest::SetScale(bool isCelsius, data_type &data)
+{
+	data._scale = isCelsius;
+}
+
+#if 0
 balboa::MessageBase::MessageBase(size_t size, unsigned long messageType)
 {
 	_prefix = '\x7e';
@@ -115,3 +166,5 @@ balboa::SetSpaTempScaleMessage::SetSpaTempScaleMessage(
 	: MessageBaseOutgoing(sizeof(*this), msSetTempScaleRequest),
 	_scale(scaleCelsius)
 {}
+
+#endif
